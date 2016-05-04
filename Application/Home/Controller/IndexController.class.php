@@ -82,13 +82,35 @@ class IndexController extends Controller{
                         }
                     }else{
                         //数据库里不存在该请求信息，则输出“你说啥”
-                        // $pro=strstr($data['Content'],'问：');
-                        // if($pro){
-                        //     $ans=strstr($data['Content'],'答：');
-                        // }else{
-                        //     $wechat->replyText("你说啥"); 
+                        $pro=$data['Content'];
+                        $one=strpos($pro,":")+1;
+                        $two=strpos($pro,":");
+                        $three=strrpos($pro, ':')+1;
+                        //$needle = "a";//判断是否包含a这个字符
+                        // $tmparray = explode($needle,$str);
+                        // if(count($tmparray)>1){
+                        // return true;
+                        // } else{
+                        // return false;
                         // }
-                       $wechat->replyText("你说啥");
+                        
+                        $yes=strstr($pro,':');
+                        if($yes!=null){
+                            $problem=mb_strcut($m, $a, $b-$a-3, 'utf-8');
+                            $answer=substr($pro,$three);
+                            $add['problem']=$problem;
+                            $add['answer']=$answer;
+                            $res=M('answer')->add($add);
+                            $wechat->replyText("问答文本已录入数据库，即刻可问答！");
+                        }else{
+                            $wechat->replyText("你说啥"); 
+                        }
+                        // $a = strpos($m,":")+1;
+                        // $b = strrpos($m, ':');
+                        // echo mb_strcut($m, $a, $b-$a-3, 'utf-8') ."\n" .
+                        // substr($m,strrpos($m, ':')+1) ;
+                        // echo $a.$b;
+                       //$wechat->replyText("你说啥");
                     }
                     break;
  
